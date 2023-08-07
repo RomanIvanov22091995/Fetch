@@ -4,6 +4,7 @@ package fetch_api.controller;
 import fetch_api.entity.Role;
 import fetch_api.entity.User;
 import fetch_api.repository.RoleRepository;
+import fetch_api.service.RoleService;
 import fetch_api.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,18 @@ import java.util.List;
 public class AdminRestController {
 
     private final UserService userService;
-    private final RoleRepository roleRepository;
 
-    public AdminRestController(UserService userService, RoleRepository roleRepository) {
+    private final RoleService roleService;
+
+
+    public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
+    }
+
+    @GetMapping("/roles")
+    public List<Role> getAllRoles() {
+        return roleService.getAllRoles();
     }
 
     @GetMapping("/users")
