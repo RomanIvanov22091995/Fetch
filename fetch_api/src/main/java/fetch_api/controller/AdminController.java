@@ -1,51 +1,49 @@
 package fetch_api.controller;
 
-import fetch_api.dto.UserDto;
+import fetch_api.entity.Role;
 import fetch_api.entity.User;
+import fetch_api.repository.RoleRepository;
 import fetch_api.service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-
-@RestController
-@RequestMapping("/admin")
-@CrossOrigin
+@Controller
+@RequestMapping("api/admin")
 public class AdminController {
-
     private final UserService userService;
-    public AdminController(UserService userService) {
+    private final RoleRepository roleRepository;
+
+    public AdminController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
+
     @GetMapping("/users")
-    public ResponseEntity<List<User>> showAllUsers() {
+    public String showAllUsers(Model model) {
         List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        model.addAttribute("users", users);
+        return "allUsers";
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
-        User user = userService.getUserById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @ModelAttribute("roles")
+    public List<Role> initializeRoles() {
+        return roleRepository.findAll();
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<HttpStatus> addUser(@RequestBody UserDto userDto) {
-        userService.addUser(userService.convertToUser(userDto));
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-    @DeleteMapping(value = "/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
-        userService.removeUser(id);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
 
-    @PatchMapping(value = "/users/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
-        userService.updateUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @GetMapping("/user/edit/{id}")
+//    public String editUser(@PathVariable Long id, Model model) {
+//
+//        List<Role> roles = roleRepository.findAll();
+//        model.addAttribute("roles", roles);
+//
+//        return "allUsers";
+//    }
 }

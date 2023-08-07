@@ -3,13 +3,14 @@ package fetch_api.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import fetch_api.dto.UserDto;
+//import fetch_api.dto.UserDto;
 import fetch_api.entity.User;
 import fetch_api.repository.UserRepository;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -68,20 +70,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void updateUser(User user) {
         Optional<User> userFromDB = userRepository.findById(user.getId());
-        String newPassword = user.getPassword();
-        String currentPassword = userFromDB.get().getPassword();
 
-        if (!currentPassword.equals(newPassword)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (userFromDB.isPresent()) {
+            String newPassword = user.getPassword();
+            String currentPassword = userFromDB.get().getPassword();
+
+            if (!currentPassword.equals(newPassword)) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("User is not founded/uploaded");
         }
-
-        userRepository.save(user);
     }
 
-    @Override
-    @Transactional
-    public User convertToUser(UserDto userDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(userDto, User.class);
-    }
+//    @Override
+//    @Transactional
+//    public User convertToUser(UserDto userDto) {
+//        ModelMapper modelMapper = new ModelMapper();
+//        return modelMapper.map(userDto, User.class);
+//    }
 }
