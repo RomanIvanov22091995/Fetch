@@ -24,15 +24,28 @@ public class AdminRestController {
     private final RoleService roleService;
 
 
+
     public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping("/roles")
+    @GetMapping("api/roles")
     public List<Role> getAllRoles() {
         return roleService.getAllRoles();
     }
+    @GetMapping("api/users")
+    public String showAllUsers(Model model) {
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "allUsers";
+    }
+
+    @ModelAttribute("roles")
+    public List<Role> initializeRoles() {
+        return roleService.getAllRoles();
+    }
+
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> showAllUsers() {
