@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/user").hasRole("USER")
-                .antMatchers("/index", "/admin/**").hasRole("ADMIN")
+                .antMatchers("/allUsers", "/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll() // Отключение проверки безопасности для всех остальных запросов
                 .and()
                 .formLogin()

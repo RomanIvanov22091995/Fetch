@@ -1,7 +1,6 @@
 package fetch_api.service;
 
 
-//import fetch_api.dto.UserDto;
 import fetch_api.entity.User;
 
 import java.util.List;
@@ -20,5 +19,4 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
-//    User convertToUser(UserDto userDto);
 }

@@ -1,6 +1,7 @@
 package fetch_api.controller;
 
 //import fetch_api.dto.UserDto;
+
 import fetch_api.entity.Role;
 import fetch_api.entity.User;
 import fetch_api.repository.RoleRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,26 +25,13 @@ public class AdminRestController {
 
     private final RoleService roleService;
 
-
-
     public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping("api/roles")
-    public List<Role> getAllRoles() {
-        return roleService.getAllRoles();
-    }
-    @GetMapping("api/users")
-    public String showAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "allUsers";
-    }
-
-    @ModelAttribute("roles")
-    public List<Role> initializeRoles() {
+    @GetMapping("/roles")
+    public List<Role> getAllRoles(Model model) {
         return roleService.getAllRoles();
     }
 

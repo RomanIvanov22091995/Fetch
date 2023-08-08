@@ -85,10 +85,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
-//    @Override
-//    @Transactional
-//    public User convertToUser(UserDto userDto) {
-//        ModelMapper modelMapper = new ModelMapper();
-//        return modelMapper.map(userDto, User.class);
-//    }
 }

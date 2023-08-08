@@ -142,10 +142,10 @@ async function newUser() {
 async function addNewUser(event) {
     event.preventDefault();
     let listOfRole = [];
+    // Получите выбранные роли из элемента формы
     for (let i = 0; i < form_new.roleSelect.options.length; i++) {
         if (form_new.roleSelect.options[i].selected) {
-            listOfRole.push({id: form_new.roleSelect.options[i].value,
-            role: form_new.roleSelect.options[i].text});
+            listOfRole.push({ id: form_new.roleSelect.options[i].value, role: form_new.roleSelect.options[i].text });
         }
     }
     let method = {
